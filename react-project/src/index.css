@@ -8,3 +8,10 @@
   font-weight: normal;
   font-style: normal;
 }
+
+.logo {
+  filter: brightness(0.8)
+}
+html[data-theme=light] .logo {
+  filter: brightness(0.2)
+}

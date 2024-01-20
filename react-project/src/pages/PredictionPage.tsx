@@ -3,6 +3,7 @@ import { NavLink, Route, Routes } from 'react-router-dom'
 import ThemeToggle from '../components/ThemeToggle'
 import OLegPage from './prediction/OLegPage'
 import FlatFeetPage from './prediction/FlatFeetPage'
+import KneeAnglePage from './prediction/KneeAnglePage'
 
 function PredictionPage() {
   const navLinkClass = ({isActive}: {isActive: boolean}) => isActive ? "active" : "" 
@@ -19,7 +20,7 @@ function PredictionPage() {
             </label>
           </div> 
           <div className="flex-1 px-2 mx-2">
-            <a className="btn btn-ghost text-xl">WALK101</a>
+            <NavLink to="/" className="btn btn-ghost text-xl">WALK101</NavLink>
           </div>
           <div className="flex-none hidden md:block">
             <ul className="menu menu-horizontal">
@@ -52,7 +53,7 @@ function PredictionPage() {
           <Routes>
             <Route path='/oleg' element={<OLegPage/>}/>
             <Route path='/flatfeet' element={<FlatFeetPage/>}/>
-            <Route path='/kneeangle'/>
+            <Route path='/kneeangle' element={<KneeAnglePage/>}/>
           </Routes>
         </div>
 

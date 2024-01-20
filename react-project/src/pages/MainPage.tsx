@@ -15,7 +15,9 @@ function MainPage() {
       </div>
       
       <div className='max-w-[576px] mx-auto px-8 py-4'>
-        <h1 className='text-6xl font-bold text-center mb-8'>WALK101</h1>
+        <div className='flex flex-col items-center'>
+          <img src="logo.png" className='logo'/>
+        </div>
         
         <div className='flex flex-row justify-center mb-16'>
           <button data-toggle-theme="dark,light" data-act-class="ACTIVECLASS"></button>

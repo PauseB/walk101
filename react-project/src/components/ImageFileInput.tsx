@@ -34,17 +34,77 @@ function ImageFileInput({ onImageSelected, horizontal=false }: ImageFileInputPro
     onImageSelected(null)
   }
 
-  const captureImage = () => {
-    if (webcamRef) {
-      // @ts-ignore
-      const imageSrc = webcamRef.current.getScreenshot()
-      setImageData(imageSrc)
-      onImageSelected(imageSrc)
-      setCameraMode(false)
+
+  const WebcamContainer = () => {
+    const [deviceIndex, setDeviceIndex] = useState(0);
+    const [devices, setDevices] = useState<MediaDeviceInfo[] | null>(null);
+  
+    const handleDevices =(mediaDevices: MediaDeviceInfo[]) => {
+      setDevices(mediaDevices.filter(d => d. kind === "videoinput"))
+      setDeviceIndex(0)
     }
-    else {
-      alert("카메라가 준비되지 않았습니다.")
+
+
+    const captureImage = () => {
+      if (webcamRef) {
+        // @ts-ignore
+        const imageSrc = webcamRef.current.getScreenshot()
+        setImageData(imageSrc)
+        onImageSelected(imageSrc)
+        setCameraMode(false)
+      }
+      else {
+        alert("카메라가 준비되지 않았습니다.")
+      }
     }
+  
+    React.useEffect(
+      () => {
+        navigator.mediaDevices.enumerateDevices().then(handleDevices);
+      },
+      [handleDevices]
+    );
+
+    if (devices != null) return (
+      <>
+        <Webcam
+          ref={webcamRef}
+          screenshotFormat='image/jpeg'
+          videoConstraints={{
+            aspectRatio: horizontal ? 16/9 : 9/16,
+            deviceId: devices[deviceIndex].deviceId
+          }}
+        />
+        <div className='join flex flex-row'>
+          <button 
+            className='flex-1 join-item btn btn-sm btn-error'
+            onClick={() => setCameraMode(false)}
+          >
+            취소
+          </button>
+          <button 
+            className='flex-1 join-item btn btn-sm btn-neutral'
+            onClick={() => setDeviceIndex(n => (n+1) % devices.length)}
+          >
+            장치 변경
+          </button>
+          <button 
+            className='flex-1 join-item btn btn-sm btn-primary'
+            onClick={() => captureImage()}
+          >
+            촬영
+          </button>
+        </div>
+        
+      </>
+    )
+
+    else return (
+      <div className={`relative ${horizontal?"aspect-[16/9]":"aspect-[9/16]"} flex flex-col justify-center items-center gap-4 rounded-box bg-base-200 hover:text-primary transition-colors`}>
+        <FontAwesomeIcon icon={icon({name: "ban"})} size="2x"/>
+        <span className='text-sm'>연결된 장치가 없습니다</span>
+      </div>
+    )
   }
 
   return (
@@ -72,29 +132,7 @@ function ImageFileInput({ onImageSelected, horizontal=false }: ImageFileInputPro
                 <span className='text-xs'>촬영</span>
               </button>
             </div>
-          : <>
-            <Webcam
-              ref={webcamRef}
-              screenshotFormat='image/jpeg'
-
-              videoConstraints={{
-                aspectRatio: horizontal ? 16/9 : 9/16,
-              }}
-            />
-            <div className='join flex flex-row'>
-              <button 
-                className='flex-1 join-item btn btn-neutral'
-                onClick={() => setCameraMode(false)}
-              >취소
-            </button>
-              <button 
-                className='flex-1 join-item btn btn-primary'
-                onClick={() => captureImage()}
-              >
-                촬영
-              </button>
-            </div>
-          </>
+          : <WebcamContainer/>
 
         )
       }
