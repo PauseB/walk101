@@ -2,6 +2,7 @@ import React from 'react'
 import { NavLink, Route, Routes } from 'react-router-dom'
 import ThemeToggle from '../components/ThemeToggle'
 import OLegPage from './prediction/OLegPage'
+import FlatFeetPage from './prediction/FlatFeetPage'
 
 function PredictionPage() {
   const navLinkClass = ({isActive}: {isActive: boolean}) => isActive ? "active" : "" 
@@ -50,7 +51,7 @@ function PredictionPage() {
         <div className='max-w-[900px] mx-auto'>
           <Routes>
             <Route path='/oleg' element={<OLegPage/>}/>
-            <Route path='/flatfeet'/>
+            <Route path='/flatfeet' element={<FlatFeetPage/>}/>
             <Route path='/kneeangle'/>
           </Routes>
         </div>
