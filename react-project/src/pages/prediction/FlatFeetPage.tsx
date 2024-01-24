@@ -11,6 +11,7 @@ function FlatFeetPage() {
         predictFunction={async ({file}) => {
           return {}
         }}
+        isReportValid={() => true}
         reportElement={({ data }) => (
           <table className='table text-center'>
             <thead>
@@ -33,6 +34,7 @@ function FlatFeetPage() {
         predictFunction={async ({file}) => {
           return {}
         }}
+        isReportValid={() => true}
         reportElement={({ data }) => (
           <table className='table text-center'>
             <thead>
@@ -55,6 +57,7 @@ function FlatFeetPage() {
           predictFunction={async ({file}) => {
             return {}
           }}
+          isReportValid={() => true}
           reportElement={({ data }) => (
             <table className='table text-center'>
               <thead>
@@ -75,6 +78,7 @@ function FlatFeetPage() {
           predictFunction={async ({file}) => {
             return {}
           }}
+          isReportValid={() => true}
           reportElement={({ data }) => (
             <table className='table text-center'>
               <thead>

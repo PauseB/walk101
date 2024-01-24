@@ -8,6 +8,7 @@ type Predictor<T> = {
   title: string,
   predictFunction: (req: {file: string}) => Promise<T>,
   reportElement: (props: {data: T, horizontal: boolean}) => React.JSX.Element,
+  isReportValid: (result: T) => boolean,
   horizontal?: boolean,
 }
 function Predictor<T>(props: Predictor<T>) {
@@ -46,7 +47,7 @@ function Predictor<T>(props: Predictor<T>) {
               </AsyncButton>
             </div>
           </>
-          : <>
+          : props.isReportValid(result) ? <>
             <props.reportElement data={result} horizontal={horizontal}/>
 
             <button className='btn' onClick={() => {
@@ -56,10 +57,24 @@ function Predictor<T>(props: Predictor<T>) {
               다시 시작하기
             </button>
           </>
-        }
+          : <>
+            <table className='table'>
+              <tbody>
+                <tr>
+                  <td>사진이 유효하지 않습니다</td>
+                </tr>
+              </tbody>
+            </table>
 
+            <button className='btn' onClick={() => { 
+              setResult(null)
+              setInputImageData(null)
+            }}>
+              다시 시작하기
+            </button>
+          </>
+        } 
       </div>
-
     </div>
   )
 }

@@ -5,12 +5,12 @@ import Webcam from 'react-webcam'
 import MediaDeviceModal from './MediaDeviceModal'
 
 
-type ImageFileInputProps = {
-  onImageSelected: (imageData: string|null) => void,
+type VideoFileInputProps = {
+  onVideoSelected: (videoData: string|null) => void,
   horizontal?: boolean,
 }
-function ImageFileInput({ onImageSelected, horizontal=false }: ImageFileInputProps) {
-  const [imageData, setImageData] = useState<string|null>(null)
+function VideoFileInput({ onVideoSelected, horizontal=false }: VideoFileInputProps) {
+  const [videoData, setVideoData] = useState<string|null>(null)
   const [cameraMode, setCameraMode] = useState<boolean>(false)
 
 
@@ -21,8 +21,8 @@ function ImageFileInput({ onImageSelected, horizontal=false }: ImageFileInputPro
       const reader = new FileReader();
       reader.onloadend = () => {
         const result = reader.result as string;
-        setImageData(result);
-        onImageSelected(result)
+        setVideoData(result);
+        onVideoSelected(result)
       };
       reader.readAsDataURL(file);
     }
@@ -30,8 +30,8 @@ function ImageFileInput({ onImageSelected, horizontal=false }: ImageFileInputPro
 
   const handleDeleteClick = (e: React.MouseEvent<any>) => {
     e.stopPropagation()
-    setImageData(null)
-    onImageSelected(null)
+    setVideoData(null)
+    onVideoSelected(null)
   }
 
 
@@ -40,19 +40,6 @@ function ImageFileInput({ onImageSelected, horizontal=false }: ImageFileInputPro
     const [modal, setModal] = useState<boolean>(true)
 
     const webcamRef = useRef(null)
-
-    const captureImage = () => {
-      if (webcamRef) {
-        // @ts-ignore
-        const imageSrc = webcamRef.current.getScreenshot()
-        setImageData(imageSrc)
-        onImageSelected(imageSrc)
-        setCameraMode(false)
-      }
-      else {
-        alert("카메라가 준비되지 않았습니다.")
-      }
-    }
   
     return (
       <>
@@ -64,8 +51,6 @@ function ImageFileInput({ onImageSelected, horizontal=false }: ImageFileInputPro
               ref={webcamRef}
               screenshotFormat='image/jpeg'
               videoConstraints={{
-                width: { ideal: horizontal ? 400 : 300 },
-                height: { ideal: horizontal ? 400*9/16 : 300*16/9 },
                 aspectRatio: horizontal ? 16/9 : 9/16,
                 deviceId: device.deviceId
               }}
@@ -82,12 +67,6 @@ function ImageFileInput({ onImageSelected, horizontal=false }: ImageFileInputPro
                 onClick={() => setModal(true)}
               >
                 장치 변경
-              </button>
-              <button 
-                className='flex-1 join-item btn btn-sm btn-primary'
-                onClick={() => captureImage()}
-              >
-                촬영
               </button>
             </div>
           </>
@@ -111,7 +90,6 @@ function ImageFileInput({ onImageSelected, horizontal=false }: ImageFileInputPro
                 장치 변경
               </button>
             </div>
-
           </>
         }
 
@@ -128,15 +106,15 @@ function ImageFileInput({ onImageSelected, horizontal=false }: ImageFileInputPro
   return (
     <>
       {
-        imageData == null && (
+        videoData == null && (
           !cameraMode
             ? <div className={`grid ${horizontal?"grid-cols-[1fr_16px_1fr]":"grid-rows-[1fr_16px_1fr]"} rounded-box bg-base-200 ${horizontal?"aspect-[16/9]":"aspect-[9/16]"}`}>
               <label className={`p-2 flex flex-col justify-center items-center gap-4 cursor-pointer hover:text-primary transition-colors`}>
                 <FontAwesomeIcon icon={icon({name: "upload"})} size="2x"/>
-                <span className='text-xs'>사진 파일 선택</span>
+                <span className='text-xs'>영상 파일 선택</span>
                 <input 
                   type="file" 
-                  accept="image/*" 
+                  accept="video/*" 
                   hidden 
                   onChange={handleFileChange}
                 />
@@ -146,7 +124,7 @@ function ImageFileInput({ onImageSelected, horizontal=false }: ImageFileInputPro
                 className={`p-2 flex flex-col justify-center items-center gap-4 cursor-pointer hover:text-primary transition-colors`}
                 onClick={() => setCameraMode(true)}
               >
-                <FontAwesomeIcon icon={icon({name: "camera"})} size="2x"/>
+                <FontAwesomeIcon icon={icon({name: "video"})} size="2x"/>
                 <span className='text-xs'>촬영</span>
               </button>
             </div>
@@ -155,12 +133,12 @@ function ImageFileInput({ onImageSelected, horizontal=false }: ImageFileInputPro
         )
       }
       {
-        imageData != null &&
+        videoData != null &&
         <div className={`relative ${horizontal?"aspect-[16/9]":"aspect-[9/16]"} flex flex-col justify-center items-center gap-4 rounded-box bg-base-200 hover:text-primary transition-colors`}>
           {
-            imageData == null
+            videoData == null
             ? <span className='loading loading-spinner'/>
-            : <img src={imageData} className='w-full h-full rounded-box'/>
+            : <video src={videoData} className='w-full h-full rounded-box'/>
           }
           <FontAwesomeIcon 
             className='absolute top-2 right-2 text-base-content hover:text-base-300 hover:scale-110 transition-all cursor-pointer' 
@@ -176,4 +154,4 @@ function ImageFileInput({ onImageSelected, horizontal=false }: ImageFileInputPro
   )
 }
 
-export default ImageFileInput
+export default VideoFileInput

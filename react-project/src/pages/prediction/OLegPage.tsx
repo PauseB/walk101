@@ -15,31 +15,32 @@ function OLegPage() {
         const res = await predictOLegCallable({file})
         return res.data
       }}
-      reportElement={({data}) => (
+      isReportValid={result => result.analysis != null}
+      reportElement={({data, horizontal}) => (
         <>
-          <img src={data.analysis.image} className='w-[300px] aspect-[9/16] rounded-box'/>
-            <table className='table text-center'>
-              <thead>
-                <tr>
-                  <th colSpan={2}>우측</th>
-                  <th colSpan={2}>좌측</th>
-                </tr>
-                <tr>
-                  <th>형태</th>
-                  <th>각도</th>
-                  <th>형태</th>
-                  <th>각도</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{ data.analysis['right-type'] }</td>
-                  <td>{ data.analysis['right-angle'] }도</td>
-                  <td>{ data.analysis['left-type'] }</td>
-                  <td>{ data.analysis['left-angle'] }도</td>
-                </tr>
-              </tbody>
-            </table>
+          <img src={data.analysis.image} className={`w-[300px] ${horizontal ? "aspect-[16/9]" : "aspect-[9/16]"} rounded-box`}/>
+          <table className='table text-center'>
+            <thead>
+              <tr>
+                <th colSpan={2}>우측</th>
+                <th colSpan={2}>좌측</th>
+              </tr>
+              <tr>
+                <th>형태</th>
+                <th>각도</th>
+                <th>형태</th>
+                <th>각도</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{ data.analysis['right-type'] }</td>
+                <td>{ data.analysis['right-angle'] }도</td>
+                <td>{ data.analysis['left-type'] }</td>
+                <td>{ data.analysis['left-angle'] }도</td>
+              </tr>
+            </tbody>
+          </table>
         </>
       )}
     />
